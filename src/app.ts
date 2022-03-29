@@ -2,7 +2,7 @@ import express, { Express, Router } from 'express'
 
 import { AppModule } from '.'
 import config from './config'
-import { api404Handler } from './core/handlers'
+import { api404Handler, errorsHandler } from './core/handlers'
 
 export default async (modules: typeof AppModule[] = []): Promise<Express> => {
   // Express.
@@ -29,6 +29,7 @@ export default async (modules: typeof AppModule[] = []): Promise<Express> => {
     console.info('Регистрация роутера АПИ')
     app.use(config.paths.api, apiRouter)
     app.use(config.paths.api + '/*', api404Handler)
+    app.use(errorsHandler)
 
     resolve(app)
   })
