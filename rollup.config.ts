@@ -7,6 +7,6 @@ export default defineConfig({
 		dir: 'dist',
 		format: 'es'
 	},
+	plugins: [typescript()],
 	external: ['path', 'axp-ts', 'dotenv', 'express', 'mongoose'],
-	plugins: [typescript()]
 })
