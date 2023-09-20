@@ -1,4 +1,4 @@
-import { TNotificationItem } from 'axp-ts'
+import { NotificationItem, TNotificationItem } from 'axp-ts'
 
 /**
  * Тип - Http ошибка.
@@ -13,15 +13,17 @@ export type THttpError = {
  * Http ошибка.
  */
 export class HttpError implements THttpError {
-	status: number = 500
-	message: string = 'Server Error'
+	status: number
+	message: string
 	errors: TNotificationItem[] = []
 
 	constructor(args?: { text?: string; code?: string; statusCode?: number }) {
 		this.status = args?.statusCode || 500
 		this.message = this.getStatusMessage(this.status)
 		if (args?.text) {
-			this.errors.push({ code: args.code || 'error', text: args.text })
+			this.errors.push(
+				new NotificationItem({ code: args.code || 'error', text: args.text })
+			)
 		}
 	}
 

@@ -8,6 +8,7 @@ import { api404Handler, resultHandler } from './core/handlers'
 export default async (
 	modules: (typeof AppModule)[] = []
 ): Promise<Express> => {
+
 	// Express.
 	const app = express()
 	const apiRouter = Router()

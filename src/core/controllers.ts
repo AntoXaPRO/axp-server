@@ -3,6 +3,7 @@ import { DataResultEntity } from 'axp-ts'
 
 /**
  * Базовый контроллер.
+ * @deprecated
  */
 export class BaseController {
 	/**

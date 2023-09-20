@@ -1,4 +1,6 @@
-import { Request, Response, NextFunction } from 'express'
+import type { Request, Response, NextFunction } from 'express'
+import type { IFormModel } from 'axp-ts'
+
 import { z } from 'zod'
 import { DataResultEntity } from 'axp-ts'
 
@@ -9,9 +11,9 @@ import { HttpError } from './errors'
  */
 export const resultHandler = (
 	result: any,
-	{ }: Request,
+	{}: Request,
 	res: Response,
-	{ }: NextFunction
+	{}: NextFunction
 ) => {
 	const dR = new DataResultEntity()
 
@@ -46,8 +48,8 @@ export const resultHandler = (
  * Обработчик 404 ошибки.
  */
 export const api404Handler = (
-	{ }: Request,
-	{ }: Response,
+	{}: Request,
+	{}: Response,
 	next: NextFunction
 ) => {
 	next(
@@ -75,10 +77,6 @@ export const zodMiddle =
 	(schemas: TZodMiddleArgs) =>
 	(req: Request, {}: Response, next: NextFunction) => {
 		try {
-			// req.params._id = ''
-			// req.body.email = 'test'
-			// console.log(req.body)
-
 			if (schemas.query) req.query = schemas.query.parse(req.query)
 			if (schemas.params) req.params = schemas.params.parse(req.params)
 			if (schemas.body) req.body = schemas.body.parse(req.body)
@@ -93,6 +91,19 @@ export const zodMiddle =
 				httpError.errors.push({ code, text: code + ' - ' + issue.message })
 			}
 
+			next(httpError)
+		}
+	}
+
+export const validFormMiddle =
+	(model: IFormModel<any>) =>
+	(req: Request, {}: Response, next: NextFunction) => {
+		if (model.isValid()) {
+			req.body = model.obj
+			next()
+		} else {
+			const httpError = new HttpError({ statusCode: 400 })
+			httpError.errors = model.errors
 			next(httpError)
 		}
 	}
