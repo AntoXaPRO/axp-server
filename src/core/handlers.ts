@@ -94,16 +94,3 @@ export const zodMiddle =
 			next(httpError)
 		}
 	}
-
-export const validFormMiddle =
-	(model: IFormModel<any>) =>
-	(req: Request, {}: Response, next: NextFunction) => {
-		if (model.isValid()) {
-			req.body = model.obj
-			next()
-		} else {
-			const httpError = new HttpError({ statusCode: 400 })
-			httpError.errors = model.errors
-			next(httpError)
-		}
-	}
